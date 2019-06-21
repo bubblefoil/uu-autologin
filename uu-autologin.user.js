@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         UU Auto-login
 // @namespace    https://github.com/bubblefoil/uu-autologin
-// @version      0.1.0
+// @version      0.1.1
 // @description  Automatically triggers login buttons. Signs in with Google.
 // @author       Ales Holy
 // @match        https://uuos9.plus4u.net/*
 // @match        https://oidc.plus4u.net/uu-oidcg01-main/*
+// @match        https://uuidentity.plus4u.net/uu-identitymanagement-main*
 // @grant        GM_addStyle
 // ==/UserScript==
 
@@ -90,6 +91,16 @@ class WtmDomObserver {
         this.clicker = new DelayedClick()
     }
 
+    static googleButton(){
+        let buttons = document.querySelectorAll('#gate-inner > button');
+        if (buttons.length !== 3) {
+            buttons = document.querySelectorAll('button.uu-identitymanagement-bricks-third-party-button-group-button-service');
+        }
+        if (buttons.length === 3) {
+            return buttons[0];
+        }
+    }
+
     observe() {
         const delayedClick = (node) => {
             this.clicker.clickLater(node);
@@ -104,9 +115,10 @@ class WtmDomObserver {
             }
 
             const btns = Array.from(document.querySelectorAll('#gate-inner > button'));
-            if (btns.length === 3) {
-                console.log('UU autologin: Will click a "Log in with Google" button in a moment:', btns[0]);
-                delayedClick(btns[0]);
+            const gBtn = WtmDomObserver.googleButton();
+            if (gBtn) {
+                console.log('UU autologin: Will click a "Log in with Google" button in a moment:', gBtn);
+                delayedClick(gBtn);
                 disconnectObserver();
             }
         });
