@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UU Auto-login
 // @namespace    https://github.com/bubblefoil/uu-autologin
-// @version      0.1.1
+// @version      0.1.2
 // @description  Automatically triggers login buttons. Signs in with Google.
 // @author       Ales Holy
 // @match        https://uuos9.plus4u.net/*
@@ -91,7 +91,7 @@ class WtmDomObserver {
         this.clicker = new DelayedClick()
     }
 
-    static googleButton(){
+    static googleButton() {
         let buttons = document.querySelectorAll('#gate-inner > button');
         if (buttons.length !== 3) {
             buttons = document.querySelectorAll('button.uu-identitymanagement-bricks-third-party-button-group-button-service');
@@ -107,7 +107,7 @@ class WtmDomObserver {
         };
 
         this.mutationObserver = new MutationObserver(function (mutations) {
-            let loginButton = document.querySelector('button.plus4u5-app-login-button');
+            let loginButton = document.querySelector('button.plus4u5-app-login-button, button.uu-specialistwtm-wtm-home-login-box-login-button');
             if (loginButton) {
                 console.debug('UU autologin: Will click this button in a moment: ', loginButton);
                 delayedClick(loginButton);
