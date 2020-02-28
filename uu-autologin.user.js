@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UU Auto-login
 // @namespace    https://github.com/bubblefoil/uu-autologin
-// @version      0.1.2
+// @version      0.1.3
 // @description  Automatically triggers login buttons. Signs in with Google.
 // @author       Ales Holy
 // @match        https://uuos9.plus4u.net/*
@@ -12,20 +12,20 @@
 
 // language=CSS
 GM_addStyle(`
-    circle.auto-login-clock {
-        fill: transparent;
-        stroke: limegreen;
-        stroke-width: 2;
-        stroke-dasharray: 250;
-        stroke-dashoffset: 0;
-        animation: rotate 1.5s linear;
-    }
+circle.auto-login-clock {
+fill: transparent;
+stroke: limegreen;
+stroke-width: 2;
+stroke-dasharray: 250;
+stroke-dashoffset: 0;
+animation: rotate 1.5s linear;
+}
 
-    @keyframes rotate {
-        to {
-            stroke-dashoffset: 250;
-        }
-    }
+@keyframes rotate {
+to {
+stroke-dashoffset: 250;
+}
+}
 `);
 
 class CancellableTimeout {
@@ -64,9 +64,9 @@ class DelayedClick {
         let circle = document.createElement('span');
         circle.classList.add('auto-login-progress');
         circle.innerHTML = `
-  <svg height="24" width="24">
-    <circle class="auto-login-clock" style="animation: rotate ${this._delay * 0.001}s linear" cx="12" cy="12" r="10" />
-  </svg>`;
+<svg height="24" width="24">
+<circle class="auto-login-clock" style="animation: rotate ${this._delay * 0.001}s linear" cx="12" cy="12" r="10" />
+</svg>`;
         node.appendChild(circle);
         document.onclick = (ev) => {
             this._cancellableTimeout.cancel();
@@ -92,11 +92,15 @@ class WtmDomObserver {
     }
 
     static googleButton() {
-        let buttons = document.querySelectorAll('#gate-inner > button');
-        if (buttons.length !== 3) {
-            buttons = document.querySelectorAll('button.uu-identitymanagement-bricks-third-party-button-group-button-service');
-        }
-        if (buttons.length === 3) {
+        let buttons = [
+            '#gate-inner > button',
+            'button.uu-identitymanagement-bricks-third-party-button-group-button-service',
+            'button.uu-identitymanagement-bricks-button'
+        ]
+            .map(s => document.querySelectorAll(s))
+            .find(nodes => nodes.length >= 3);
+
+        if (buttons.length > 0) {
             return buttons[0];
         }
     }
