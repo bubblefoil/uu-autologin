@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         UU Auto-login
 // @namespace    https://github.com/bubblefoil/uu-autologin
-// @version      0.1.3
+// @version      0.1.4
 // @description  Automatically triggers login buttons. Signs in with Google.
 // @author       Ales Holy
 // @match        https://uuos9.plus4u.net/*
@@ -98,7 +98,7 @@ class WtmDomObserver {
             'button.uu-identitymanagement-bricks-button'
         ]
             .map(s => document.querySelectorAll(s))
-            .find(nodes => nodes.length >= 3);
+            .filter(nodes => nodes.length >= 3);
 
         if (buttons.length > 0) {
             return buttons[0];
